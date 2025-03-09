@@ -3,6 +3,17 @@
 	export let input: string;
 	export let sendMessage: (event: Event) => void;
 	export let isStreaming: boolean;
+
+	function handleKeyDown(event: KeyboardEvent) {
+		if (event.key === 'Enter' && !event.shiftKey) {
+			event.preventDefault();
+			const chatInput = document.querySelector('#chat');
+			if (chatInput) {
+				(chatInput as HTMLTextAreaElement).value = '';
+			}
+			sendMessage(event);
+		}
+	}
 </script>
 
 <form on:submit={sendMessage} class="sticky bottom-0 w-full">
@@ -15,6 +26,7 @@
 				class="bg-base-100 mx-4 block h-16 w-full rounded-lg border border-gray-300 p-2.5 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 				placeholder="Your message..."
 				bind:value={input}
+				on:keydown={handleKeyDown}
 			></textarea>
 			<button
 				disabled={isStreaming}
