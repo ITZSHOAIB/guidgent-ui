@@ -17,7 +17,7 @@
 		if (!browser) return;
 
 		console.log('Setting up EventSource...');
-		const eventSource = new EventSource('/api/v1/chat/events');
+		const eventSource = new EventSource('/api/v1/agent/stream/1');
 
 		eventSource.onopen = () => {
 			console.log('EventSource connection opened.');
@@ -31,13 +31,13 @@
 				return;
 			}
 
-			if (message.type === 'chat') {
+			if (message.type === 'agent') {
 				if (isStreaming) {
 					const lastMessage = chatHistory[chatHistory.length - 1];
-					lastMessage.text += message.text;
+					lastMessage.text += message.content;
 					chatHistory = [...chatHistory];
 				} else {
-					chatHistory = [...chatHistory, { text: message.text, role: 'agent' }];
+					chatHistory = [...chatHistory, { text: message.content, role: 'agent' }];
 					isStreaming = true;
 				}
 			}
@@ -57,7 +57,7 @@
 		if (input.trim() === '') return;
 
 		chatHistory = [...chatHistory, { text: input, role: 'user' }];
-		const response = await fetch('/api/v1/chat/message', {
+		const response = await fetch('/api/v1/agent/stream/1', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
