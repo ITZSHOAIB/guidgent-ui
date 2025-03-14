@@ -62,7 +62,7 @@
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ text: input })
+			body: JSON.stringify({ message: input })
 		});
 
 		if (response.ok) {
